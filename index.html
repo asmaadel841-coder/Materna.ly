@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ماتيرنا ليبيا | اختبارات حمل أمريكية</title>
+    <!-- استيراد أيقونات FontAwesome لشاشات التواصل والسلة -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* إعدادات الخطوط والألوان العامة */
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap');
+        
+        :root {
+            --primary-color: #e05a88; /* وردي ماتيرنا */
+            --secondary-color: #333;
+            --light-bg: #fff5f7;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: #fcfcfc;
+            color: var(--secondary-color);
+            overflow-x: hidden;
+        }
+
+        /* شريط التنقل (Navbar) */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+        }
+
+        .cart-icon-btn {
+            background: none;
+            border: none;
+            font-size: 22px;
+            color: var(--secondary-color);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+
+        /* الواجهة الرئيسية (Hero Section) */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            gap: 40px;
+        }
+
+        .hero-content {
+            flex: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 40px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-weight: 900;
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            color: #666;
+        }
+
+        .hero-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* قسم المنتجات */
+        .products-section {
+            background-color: var(--light-bg);
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .products-section h2 {
+            font-size: 32px;
+            margin-bottom: 40px;
+            color: var(--secondary-color);
+            position: relative;
+        }
+
+        .products-section h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background-color: var(--primary-color);
+            margin: 10px auto 0;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .product-card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .add-to-cart-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #c44572;
+        }
+
+        /* سلة المشتريات الجانبية */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            left: -350px; /* مخفية في البداية */
+            width: 350px;
+            height: 100%;
+            background-color: var(--white);
+            box-shadow: 2px 0 15px rgba(0,0,0,0.2);
+            z-index: 2000;
+            transition: 0.3s ease;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar.open {
+            left: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f9f9f9;
+        }
+
+        .cart-item-details h4 {
+            font-size: 16px;
+        }
+
+        .remove-item {
+            background: none;
+            border: none;
+            color: red;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .cart-total {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .checkout-btn {
+            background-color: #25D366; /* لون الواتساب */
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+
+        .checkout-btn:hover {
+            background-color: #1ebd57;
+        }
+
+        /* الفوتر (Footer) */
+        footer {
+            background-color: #222;
+            color: #fff;
+            padding: 40px 20px;
+        }
+
+        .footer-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 30px;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .footer-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .social-icons a {
+            display: inline-block;
+            margin-left: 15px;
+            font-size: 20px;
+            color: var(--white);
+            transition: 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            color: #888;
+            font-size: 14px;
+        }
+
+        /* استعلامات الشاشات الصغيرة الهواتف */
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+            .nav-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- شريط التنقل العلوي -->
+    <header>
+        <div class="nav-container">
+            <!-- <a href="#" class="logo">ماتيرنا - Materna</a>-->
+             <!-- الكود الجديد (صورة اللوجو) -->
+            <a href="#" class="logo-link">
+            <img src="images/logo.png" alt="Materna Logo" class="logo-img">
+            </a>
+            <nav>
+                <a href="#">الرئيسية</a>
+                <a href="#products">منتجاتنا</a>
+            </nav>
+            <button class="cart-icon-btn" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cart-count">0</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- القسم الرئيسي (البداية) -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>لأول مرة في ليبيا</h1>
+             <h2>منتجات أمريكية أصلية</h2>
+            <p>اختبارات الحمل الأمريكية "ماتيرنا" الأكثر دقة وموثوقية، متوفرة الآن بين يديكِ وبكل خصوصية.</p>
+            <a href="#products" class="add-to-cart-btn" style="text-decoration: none; padding: 12px 30px; inline-size: max-content; display: inline-block;">تصفح المنتجات</a>
+        </div>
+        <div class="hero-image">
+            <!-- ضعي رابط صورتك الرئيسية هنا مكان placeholder -->
+            <img src="images/hero.png"؛ alt="Materna Libya"> 
+        </div>
+    </section>
+
+    <!-- قسم المنتجات الأربعة -->
+    <section class="products-section" id="products">
+        <h2>منتجاتنا (Our Products)</h2>
+        <div class="products-grid">
+            
+            <!-- المنتج الأول -->
+            <div class="product-card">
+                <img src="images/prod1.png" alt="المعجزة - The Miracle" class="product-img">
+                <h3>المعجزة - The Mircale</h3>
+                <p class="product-price">180 د.ل</p>
+                <button class="add-to-cart-btn" onclick="addToCart('المعجزة - The Mircale', 180)">إضافة للسلة</button>
+            </div>
+
+            <!-- المنتج الثاني -->
+            <div class="product-card">
+                <img src="images/prod2.jpg" alt="العد التنازلي - The countdown" class="product-img">
+                <h3>العد التنازلي - The countdown</h3>
+                <p class="product-price">220 د.ل</p>
+                <button class="add-to-cart-btn" onclick="addToCart('العد التنازلي - The countdown', 220)">إضافة للسلة</button>
+            </div>
+
+            <!-- المنتج الثالث -->
+            <div class="product-card">
+                <img src="images/prod3.png" alt="النخبة - The Elite" class="product-img">
+                <h3>النخبة - The Elite </h3>
+                <p class="product-price">280 د.ل</p>
+                <button class="add-to-cart-btn" onclick="addToCart('النخبة- The Elite', 280)">إضافة للسلة</button>
+            </div>
+
+            <!-- المنتج الرابع -->
+            <!--<div class="product-card">
+                <img src="https://via.placeholder.com/250x200" alt="منتج 4">
+                <h3>مجموعة ماتيرنا المتكاملة</h3>
+                <p class="product-price">90 د.ل</p>
+                <button class="add-to-cart-btn" onclick="addToCart('مجموعة ماتيرنا المتكاملة', 90)">إضافة للسلة</button>
+            </div>-->
+
+        </div>
+    </section>
+
+    <!-- سلة المشتريات الجانبية -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>سلة المشتريات</h3>
+            <button class="close-cart" onclick="toggleCart()">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <!-- المنتجات المضافة ستظهر هنا برمجياً -->
+        </div>
+        <div class="cart-total">
+            <span>الإجمالي:</span>
+            <span id="cart-total-price">0 د.ل</span>
+        </div>
+        <button class="checkout-btn" onclick="checkoutWhatsApp()">تأكيد الطلب عبر واتساب <i class="fab fa-whatsapp"></i></button>
+    </div>
+
+    <!-- الفوتر (أسفل الصفحة) -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>ماتيرنا ليبيا</h3>
+                <p>أفضل اختبارات الحمل الأمريكية لأول مرة أونلاين وتوصيل لكافة مدن ليبيا.</p>
+            </div>
+            <div class="footer-section">
+                <h3>موقعنا ومعلومات التواصل</h3>
+                <p><i class="fas fa-map-marker-alt"></i> ليبيا - طرابلس (متوفر توصيل لكل المدن)</p>
+                <p><i class="fas fa-phone"></i> +218914383194</p>
+                <p><i class="fas fa-envelope"></i> info@materna.ly</p>
+            </div>
+            <div class="footer-section">
+                <h3>تابعونا</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>جميع الحقوق محفوظة &copy; 2026 ماتيرنا ليبيا</p>
+        </div>
+    </footer>
+
+    <!-- كود الجافاسكريبت لتشغيل السلة والواتساب -->
+    <script>
+        let cart = [];
+        // ضعي رقم الواتساب الخاص بكِ هنا (مبتدئاً بمفتاح الدولة بدون أصفار أو زائد، مثل: 218910000000)
+        const whatsappNumber = "218914383194"; 
+
+        function toggleCart() {
+            document.getElementById('cart-sidebar').classList.toggle('open');
+        }
+
+        function addToCart(name, price) {
+            // التحقق إذا كان المنتج موجود مسبقاً لزيادة الكمية
+            let existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ name: name, price: price, quantity: 1 });
+            }
+            updateCartUI();
+            
+            // فتح السلة تلقائياً عند إضافة منتج لتنبيه الزبون
+            document.getElementById('cart-sidebar').classList.add('open');
+        }
+
+        function removeItem(name) {
+            cart = cart.filter(item => item.name !== name);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartCount = document.getElementById('cart-count');
+            const cartTotalPrice = document.getElementById('cart-total-price');
+            
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+            let count = 0;
+
+            cart.forEach(item => {
+                total += (item.price * item.quantity);
+                count += item.quantity;
+
+                cartItemsContainer.innerHTML += `
+                    <div class="cart-item">
+                        <div class="cart-item-details">
+                            <h4>${item.name}</h4>
+                            <small>${item.price} د.ل × ${item.quantity}</small>
+                        </div>
+                        <button class="remove-item" onclick="removeItem('${item.name}')">حذف</button>
+                    </div>
+                `;
+            });
+
+            cartCount.innerText = count;
+            cartTotalPrice.innerText = total + " د.ل";
+        }
+
+        function checkoutWhatsApp() {
+            if (cart.length === 0) {
+                alert("السلة فارغة! يرجى إضافة منتجات أولاً.");
+                return;
+            }
+
+            // بناء نص الرسالة تلقائياً للواتساب
+            let text = "مرحباً ماتيرنا ليبيا، أريد طلب المنتجات التالية:\n\n";
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                text += `${index + 1}. ${item.name} (الكمية: ${item.quantity}) - السعر: ${item.price * item.quantity} د.ل\n`;
+                total += (item.price * item.quantity);
+            });
+
+            text += `\n*الإجمالي الكلي:* ${total} د.ل\n`;
+            text += "الرجاء تأكيد الطلب وتحديد موعد التوصيل.";
+
+            // تشفير النص ليتناسب مع روابط الويب
+            let encodedText = encodeURIComponent(text);
+            
+            // فتح رابط الواتساب
+            window.open(`https://wa.me/${whatsappNumber}?text=${encodedText}`, '_blank');
+        }
+    </script>
+</body>
+</html>
